@@ -51,8 +51,8 @@ export interface TaskConfig {
 
 /** Metadata for a user-attached file in a task. */
 export interface FileAttachmentInfo {
-  /** Unique identifier for this attachment */
-  id: string;
+  /** Unique identifier for this attachment (optional, will be generated if missing) */
+  id?: string;
   /** Original filename */
   name: string;
   /** Absolute or working-directory-relative file path */

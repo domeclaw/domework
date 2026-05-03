@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const fileAttachmentSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   name: z.string(),
   path: z.string(),
   type: z.enum(['image', 'text', 'code', 'pdf', 'other']),
