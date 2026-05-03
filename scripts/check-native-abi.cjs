@@ -7,7 +7,7 @@ const { NODE_VERSION } = require('../apps/desktop/scripts/node-version.cjs');
 
 const workspaces = [
   {
-    name: '@accomplish/daemon',
+    name: '@domework/daemon',
     dir: path.join(rootDir, 'apps', 'daemon'),
   },
   {

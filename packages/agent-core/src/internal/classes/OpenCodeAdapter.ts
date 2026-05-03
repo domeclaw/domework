@@ -378,6 +378,17 @@ export class OpenCodeAdapter extends EventEmitter<OpenCodeAdapterEvents> {
     this.currentModelId = config.modelId ?? null;
     this.currentProviderId = config.provider ?? null;
     this.hasCompleted = false;
+
+    // Log task start with provider info for debugging
+    log.info(`Starting task ${taskId}`, {
+      provider: config.provider,
+      model: config.modelId,
+    });
+    console.log('[OpenCodeAdapter] Task Start:', {
+      taskId,
+      provider: config.provider,
+      model: config.modelId,
+    });
     this.wasInterrupted = false;
     this.pendingRequest = null;
     this.browserFrameSeen.clear();
@@ -918,6 +929,44 @@ export class OpenCodeAdapter extends EventEmitter<OpenCodeAdapterEvents> {
         const err = (event.properties as { error?: { message?: string; name?: string } }).error;
         if (err) {
           const msg = err.message ?? 'Session error';
+          const errorName = err.name ?? 'Unknown';
+
+          // Log full error details for debugging (will be captured by LogCollector)
+          log.error(`Session error occurred: ${errorName} - ${msg}`, {
+            errorName,
+            errorMessage: msg,
+            errorProperties: err,
+            sessionId: this.currentSessionId,
+            taskId: this.currentTaskId,
+          });
+
+          // Also log to console for immediate visibility (even without debug mode)
+          console.error('[OpenCodeAdapter] Session Error:', {
+            name: errorName,
+            message: msg,
+            error: err,
+            sessionId: this.currentSessionId,
+            taskId: this.currentTaskId,
+          });
+
+          this.emit('error', new Error(msg));
+          this.markComplete('error', msg);
+        } else {
+          // Log when session.error event has no error details
+          log.warn('Session error event received with no error details', {
+            sessionId: this.currentSessionId,
+            taskId: this.currentTaskId,
+            eventProperties: event.properties,
+          });
+
+          // Also log to console for immediate visibility
+          console.warn('[OpenCodeAdapter] Session Error Event (no details):', {
+            sessionId: this.currentSessionId,
+            taskId: this.currentTaskId,
+            eventProperties: event.properties,
+          });
+
+          const msg = 'Session error';
           this.emit('error', new Error(msg));
           this.markComplete('error', msg);
         }

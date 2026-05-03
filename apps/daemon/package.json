@@ -1,8 +1,8 @@
 {
-  "name": "@accomplish/daemon",
+  "name": "@domework/daemon",
   "version": "0.1.0",
   "private": true,
-  "description": "Accomplish background daemon process",
+  "description": "Domework background daemon process",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsup && node scripts/write-dist-package-type.cjs",

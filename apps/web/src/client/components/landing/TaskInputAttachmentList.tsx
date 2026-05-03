@@ -47,7 +47,7 @@ export function TaskInputAttachmentList({
               <span className="text-muted-foreground/50">{formatFileSize(file.size)}</span>
               <button
                 type="button"
-                onClick={() => onRemove(file.id)}
+                onClick={() => file.id && onRemove(file.id)}
                 className="ml-0.5 rounded-sm opacity-50 hover:opacity-100 transition-opacity"
                 aria-label={`Remove ${file.name}`}
               >

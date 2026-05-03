@@ -328,13 +328,13 @@ export function AccomplishAiProviderForm({
       className="rounded-xl border border-border bg-card p-5"
       data-testid="provider-settings-panel"
     >
-      <ProviderFormHeader logoSrc={ACCOMPLISH_LOGO} providerName="Accomplish" />
+      <ProviderFormHeader logoSrc={ACCOMPLISH_LOGO} providerName="Domework" />
 
       <div className="space-y-3">
         <p className="text-sm text-muted-foreground whitespace-pre-line">
           {t(
             'providers.accomplishAi.description',
-            'Use the built-in model powered by Accomplish - no API key required.\nIncludes 200 free credits per month to get you started.',
+            'Use the built-in model - no API key required.\nIncludes 200 free credits per month to get you started.',
           )}
         </p>
 

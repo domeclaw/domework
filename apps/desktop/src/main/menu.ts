@@ -92,18 +92,18 @@ export function buildAppMenu(): void {
       label: 'Help',
       submenu: [
         ...(!isMac ? [updateMenuItem, { type: 'separator' as const }] : []),
-        { label: 'Learn More', click: () => shell.openExternal('https://accomplish.ai') },
+        { label: 'Learn More', click: () => shell.openExternal('https://domework.ai') },
         ...(!isMac
           ? [
               { type: 'separator' as const },
               {
-                label: 'About Accomplish',
+                label: 'About Domework',
                 click: async () => {
                   await dialog.showMessageBox({
                     type: 'info',
-                    title: 'About Accomplish',
-                    message: 'Accomplish',
-                    detail: `Version ${app.getVersion()}\n\nA desktop automation assistant.\n\n© ${new Date().getFullYear()} Accomplish AI`,
+                    title: 'About Domework',
+                    message: 'Domework',
+                    detail: `Version ${app.getVersion()}\n\nA desktop automation assistant.\n\n© ${new Date().getFullYear()} Domework`,
                     buttons: ['OK'],
                   });
                 },

@@ -54,7 +54,7 @@ export function AttachmentList({ attachments, removeAttachment }: AttachmentList
           {getAttachmentIcon(file.type)}
           <span className="text-xs font-medium truncate">{file.name}</span>
           <button
-            onClick={() => removeAttachment(file.id)}
+            onClick={() => file.id && removeAttachment(file.id)}
             aria-label={`Remove attachment ${file.name}`}
             className="text-muted-foreground hover:text-foreground shrink-0 ml-1 rounded-full p-0.5 hover:bg-muted"
           >

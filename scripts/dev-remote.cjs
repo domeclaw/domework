@@ -12,20 +12,18 @@ const positionalArgs = cliArgs.filter((arg) => !arg.startsWith('--'));
 const url = positionalArgs[0];
 if (!url) {
   console.error('Usage: pnpm dev:remote <url>');
-  console.error(
-    'Example: pnpm dev:remote https://accomplish-app-preview-42.accomplish.workers.dev',
-  );
+  console.error('Example: pnpm dev:remote https://domework-app-preview-42.domework.workers.dev');
   process.exit(1);
 }
 
 const env = {
   ...process.env,
-  ACCOMPLISH_ROUTER_URL: url,
+  DOMEWORK_ROUTER_URL: url,
 };
 
 console.log('[dev:remote] Launching Electron → ' + url);
 
-const electronArgs = ['-F', '@accomplish/desktop', 'dev:remote'];
+const electronArgs = ['-F', '@domework/desktop', 'dev:remote'];
 if (isCheck) {
   electronArgs.push('--', '--check');
 }

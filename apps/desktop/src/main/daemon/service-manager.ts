@@ -281,7 +281,7 @@ function getSystemdServiceContent(): string {
 
   const lines = [
     '[Unit]',
-    'Description=Accomplish AI Daemon',
+    'Description=Domework Daemon',
     'After=default.target',
     '',
     '[Service]',
