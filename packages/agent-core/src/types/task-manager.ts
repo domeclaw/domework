@@ -181,6 +181,11 @@ export interface TaskAdapterOptions {
   /** Sandbox configuration used when sandboxProvider is set.
    * Must be accompanied by sandboxProvider when mode is not 'disabled'. */
   sandboxConfig?: SandboxConfig;
+  /**
+   * Permission auto-approval mode. When 'allow_all', permissions are
+   * automatically approved without showing UI dialogs.
+   */
+  permissionMode?: 'ask' | 'allow_all';
 }
 
 /** Options for creating a TaskManager instance */

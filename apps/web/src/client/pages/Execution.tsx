@@ -164,7 +164,7 @@ export default function ExecutionPage() {
         )}
 
         {/* Running — stop button */}
-        {s.currentTask.status === 'running' && !s.permissionRequest && (
+        {s.currentTask.status === 'running' && (
           <div className="flex-shrink-0 border-t border-border bg-card/50 px-6 py-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5">
@@ -178,7 +178,7 @@ export default function ExecutionPage() {
                 <button
                   onClick={s.interruptTask}
                   title={t('stopAgent')}
-                  className="flex h-6 w-6 items-center justify-center rounded-full bg-[#e54d2e] text-white hover:bg-[#d4442a] transition-colors shrink-0"
+                  className="flex h-6 w-6 items-center justify-center rounded-full bg-[#e54d2e] text-white hover:bg-[#d4442a] active:scale-95 transition-all shrink-0 cursor-pointer"
                   data-testid="execution-stop-button"
                 >
                   <span className="block h-2.5 w-2.5 rounded-[2px] bg-white" />

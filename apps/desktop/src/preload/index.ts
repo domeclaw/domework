@@ -624,6 +624,12 @@ const accomplishAPI = {
   setCloseBehavior: (behavior: string): Promise<void> =>
     ipcRenderer.invoke('daemon:set-close-behavior', behavior),
 
+  // Permission mode
+  getPermissionMode: (): Promise<'ask' | 'allow_all'> =>
+    ipcRenderer.invoke('daemon:get-permission-mode'),
+  setPermissionMode: (mode: 'ask' | 'allow_all'): Promise<void> =>
+    ipcRenderer.invoke('daemon:set-permission-mode', mode),
+
   // Daemon connection events
   onDaemonDisconnected: (callback: () => void): (() => void) => {
     const listener = () => callback();

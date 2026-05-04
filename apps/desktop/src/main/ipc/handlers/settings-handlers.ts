@@ -284,6 +284,21 @@ export function registerSettingsHandlers(): void {
     });
   });
 
+  // ── Permission Mode ─────────────────────────────────────────────────
+
+  handle('daemon:get-permission-mode', async () => {
+    return getDaemonClient().call('settings.getPermissionMode');
+  });
+
+  handle('daemon:set-permission-mode', async (_event: IpcMainInvokeEvent, mode: string) => {
+    if (mode !== 'ask' && mode !== 'allow_all') {
+      throw new Error(`Invalid permission mode: ${mode}`);
+    }
+    await getDaemonClient().call('settings.setPermissionMode', {
+      mode: mode as 'ask' | 'allow_all',
+    });
+  });
+
   registerCloudBrowserHandlers(handle);
   registerSandboxHandlers(handle);
   registerAuthHandlers(handle);

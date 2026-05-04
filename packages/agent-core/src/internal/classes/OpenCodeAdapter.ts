@@ -170,6 +170,11 @@ export interface AdapterOptions {
    * Undefined in pure OSS builds — the adapter is a no-op on this axis.
    */
   setProxyTaskId?: (taskId: string | undefined) => void;
+  /**
+   * Permission auto-approval mode. When 'allow_all', permissions are
+   * automatically approved without showing UI dialogs.
+   */
+  permissionMode?: 'ask' | 'allow_all';
 }
 
 export interface OpenCodeAdapterEvents {
@@ -223,6 +228,7 @@ export class OpenCodeAdapter extends EventEmitter<OpenCodeAdapterEvents> {
   private options: AdapterOptions;
   private sandboxProvider: SandboxProvider;
   private sandboxConfig: SandboxConfig;
+  private permissionMode: 'ask' | 'allow_all';
   private client: OpencodeClient | null = null;
   private logWatcher: OpenCodeLogWatcher | null = null;
   private completionEnforcer: CompletionEnforcer;
@@ -361,6 +367,7 @@ export class OpenCodeAdapter extends EventEmitter<OpenCodeAdapterEvents> {
       this.sandboxConfig = options.sandboxConfig ?? DEFAULT_SANDBOX_CONFIG;
     }
 
+    this.permissionMode = options.permissionMode ?? 'ask';
     this.completionEnforcer = this.createCompletionEnforcer();
     this.setupLogWatcher();
   }
@@ -655,8 +662,10 @@ export class OpenCodeAdapter extends EventEmitter<OpenCodeAdapterEvents> {
   }
 
   async interruptTask(): Promise<void> {
+    log.info(`[Interrupt] Starting task interruption (wasInterrupted=${this.wasInterrupted})`);
     this.wasInterrupted = true;
     await this.abortSession('interrupt');
+    log.info(`[Interrupt] Task interruption completed`);
   }
 
   getSessionId(): string | null {
@@ -1270,6 +1279,15 @@ export class OpenCodeAdapter extends EventEmitter<OpenCodeAdapterEvents> {
   }
 
   private handlePermissionAsked(sdkReq: OpenCodeSdkPermissionRequest): void {
+    // Auto-approve if permissionMode is 'allow_all'
+    if (this.permissionMode === 'allow_all') {
+      log.info(`[Auto-Approve] Auto-approving permission: ${sdkReq.permission}`);
+      this.autoApprovePermission(sdkReq);
+      return;
+    }
+
+    log.info(`[Permission] Showing dialog for: ${sdkReq.permission} (mode=${this.permissionMode})`);
+
     const requestId = this.generateRequestId('permission');
     this.pendingRequest = {
       kind: 'permission',
@@ -1290,6 +1308,23 @@ export class OpenCodeAdapter extends EventEmitter<OpenCodeAdapterEvents> {
       createdAt: new Date().toISOString(),
     };
     this.emit('permission-request', req);
+  }
+
+  private async autoApprovePermission(sdkReq: OpenCodeSdkPermissionRequest): Promise<void> {
+    if (!this.client) {
+      log.error('[Auto-Approve] Cannot auto-approve: client is null');
+      return;
+    }
+    try {
+      log.info(`[Auto-Approve] Sending reply for request ${sdkReq.id}: always`);
+      await this.client.permission.reply(
+        { requestID: sdkReq.id, reply: 'always' },
+        { throwOnError: true },
+      );
+      log.info(`[Auto-Approve] Successfully approved: ${sdkReq.permission}`);
+    } catch (error) {
+      log.error('Failed to auto-approve permission:', error as Record<string, unknown>);
+    }
   }
 
   private handleQuestionAsked(sdkReq: OpenCodeSdkQuestionRequest): void {
@@ -1507,16 +1542,26 @@ export class OpenCodeAdapter extends EventEmitter<OpenCodeAdapterEvents> {
   }
 
   private async abortSession(reason: 'cancel' | 'interrupt' | 'log-error'): Promise<void> {
+    log.info(`[AbortSession] Aborting session ${this.currentSessionId} with reason: ${reason}`);
     this.eventAbortController?.abort();
     if (this.client && this.currentSessionId) {
       try {
+        log.info(`[AbortSession] Calling SDK session.abort...`);
         await this.client.session.abort(
           { sessionID: this.currentSessionId },
           { throwOnError: false },
         );
+        log.info(`[AbortSession] SDK session.abort completed successfully`);
       } catch (err) {
-        log.debug?.(`session.abort (${reason}) threw`, { error: serializeError(err) });
+        log.error(
+          `[AbortSession] session.abort (${reason}) failed:`,
+          err as Record<string, unknown>,
+        );
       }
+    } else {
+      log.warn(
+        `[AbortSession] Cannot abort: client=${!!this.client}, sessionId=${this.currentSessionId}`,
+      );
     }
   }
 

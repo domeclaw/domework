@@ -176,6 +176,15 @@ export async function onBeforeStart(
       readGaClientId: () => null, // GA client ID not available in daemon — fingerprint fallback used
     },
     database,
+    log: (level, msg, data) => {
+      const logger =
+        level === 'WARN' ? console.warn : level === 'ERROR' ? console.error : console.info;
+      if (data) {
+        logger(`[resolveTaskConfig] ${msg}`, data);
+      } else {
+        logger(`[resolveTaskConfig] ${msg}`);
+      }
+    },
   });
 
   const result = generateConfig(configOptions);

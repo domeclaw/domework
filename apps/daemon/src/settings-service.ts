@@ -64,6 +64,7 @@ export class SettingsService extends EventEmitter {
       sandboxConfig: this.storage.getSandboxConfig(),
       cloudBrowserConfig: this.storage.getCloudBrowserConfig(),
       messagingConfig: this.storage.getMessagingConfig(),
+      permissionMode: this.storage.getPermissionMode(),
       // `AppSettings` exposes ollama/litellm/azure/lmstudio/huggingface
       // configs but NOT nim, so it rides on the snapshot explicitly to keep
       // M5's first-frame read complete.
@@ -116,6 +117,15 @@ export class SettingsService extends EventEmitter {
   setOnboardingComplete(complete: boolean): void {
     this.storage.setOnboardingComplete(complete);
     this.emit('settings.changed', { key: 'onboardingComplete', value: complete });
+  }
+
+  setPermissionMode(mode: 'ask' | 'allow_all'): void {
+    this.storage.setPermissionMode(mode);
+    this.emit('settings.changed', { key: 'permissionMode', value: mode });
+  }
+
+  getPermissionMode(): 'ask' | 'allow_all' {
+    return this.storage.getPermissionMode();
   }
 
   // ─── App-level settings — on-demand getters ─────────────────────────────

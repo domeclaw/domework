@@ -677,5 +677,11 @@
     "save": "Сохранить",
     "edit": "Редактировать",
     "delete": "Удалить"
+  },
+  "permissions": {
+    "title": "Auto-approve permissions",
+    "descriptionAsk": "Ask for approval before each action (recommended)",
+    "descriptionAllowAll": "Automatically approve all actions without asking",
+    "warning": "When enabled, the AI can execute bash commands, read/write files, and access web without confirmation. Use with caution."
   }
 }

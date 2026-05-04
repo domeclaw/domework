@@ -28,12 +28,14 @@ import {
 import { OpenCodeServerManager } from './opencode/server-manager.js';
 
 import { type TaskServiceEvents, type TaskServiceOptions } from './task-service-events.js';
+import { type SettingsService } from './settings-service.js';
 
 export type { TaskServiceEvents, TaskServiceOptions };
 
 export class TaskService extends EventEmitter {
   private taskManager: TaskManagerAPI;
   private storage: StorageAPI;
+  private settingsService: SettingsService;
   private opts: TaskConfigBuilderOptions;
   private rpcConnectivityProbe: { hasConnectedClients(): boolean };
   private serverManager: OpenCodeServerManager;
@@ -49,6 +51,7 @@ export class TaskService extends EventEmitter {
   constructor(storage: StorageAPI, options: TaskServiceOptions) {
     super();
     this.storage = storage;
+    this.settingsService = options.settingsService;
     this.opts = {
       ...options,
       isPackaged: options.isPackaged ?? false,
@@ -146,6 +149,8 @@ export class TaskService extends EventEmitter {
         // when the optional runtime package is present; undefined for
         // pure OSS builds (no-op).
         setProxyTaskId: options.setProxyTaskId,
+        // Permission auto-approval mode from settings
+        permissionMode: this.settingsService.getPermissionMode(),
       },
       defaultWorkingDirectory: homedir(),
       maxConcurrentTasks: 10,
@@ -266,6 +271,10 @@ export class TaskService extends EventEmitter {
     const { taskId } = params;
     if (this.taskManager.hasActiveTask(taskId)) {
       await this.taskManager.interruptTask(taskId);
+      // Update task status to interrupted and emit event so UI updates
+      const completedAt = new Date().toISOString();
+      this.storage.updateTaskStatus(taskId, 'interrupted', completedAt);
+      this.emit('statusChange', { taskId, status: 'interrupted', completedAt });
     }
   }
 

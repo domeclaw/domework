@@ -169,26 +169,11 @@ async function main(): Promise<void> {
     // Missing package: pure OSS. Stay silent.
   }
 
-  const taskService = new TaskService(storage, {
-    userDataPath,
-    mcpToolsPath,
-    isPackaged,
-    resourcesPath,
-    appPath,
-    accomplishRuntime,
-    rpcConnectivityProbe: { hasConnectedClients: () => rpc.hasConnectedClients() },
-    setProxyTaskId,
-  });
   const healthService = new HealthService();
   // Scheduler-sourced tasks: `source: 'scheduler'` drives the no-UI auto-deny
   // policy in task-callbacks. If no RPC client is connected when a scheduled
   // task asks for a permission, it auto-denies immediately (matches the
   // pre-port PermissionService safeguard that Phase 2 replaced).
-  const schedulerService = new SchedulerService(storage, (prompt, workspaceId) => {
-    void taskService.startTask({ prompt, workspaceId, source: 'scheduler' });
-  });
-  const whatsappService = new WhatsAppDaemonService(storage, userDataPath, taskService);
-  const whatsappSendApi = new WhatsAppSendApi(whatsappService, authToken);
 
   // OpenAI ChatGPT OAuth manager (Phase 4a of the SDK cutover port). Owns
   // the transient `opencode serve` + SDK auth flow so desktop only handles
@@ -218,6 +203,24 @@ async function main(): Promise<void> {
   const workspaceService = new WorkspaceService();
   const connectorService = new ConnectorService(storage);
   const legacyImportService = new LegacyImportService(storageService.getRawDatabase());
+
+  // TaskService — must be created after settingsService
+  const taskService = new TaskService(storage, {
+    userDataPath,
+    mcpToolsPath,
+    isPackaged,
+    resourcesPath,
+    appPath,
+    accomplishRuntime,
+    settingsService,
+    rpcConnectivityProbe: { hasConnectedClients: () => rpc.hasConnectedClients() },
+    setProxyTaskId,
+  });
+  const schedulerService = new SchedulerService(storage, (prompt, workspaceId) => {
+    void taskService.startTask({ prompt, workspaceId, source: 'scheduler' });
+  });
+  const whatsappService = new WhatsAppDaemonService(storage, userDataPath, taskService);
+  const whatsappSendApi = new WhatsAppSendApi(whatsappService, authToken);
 
   // Milestone 4 services — own Google accounts + skills.
   const googleAccountService = new GoogleAccountService(storageService.getRawDatabase(), storage);

@@ -595,6 +595,10 @@ interface AccomplishAPI {
   getCloseBehavior(): Promise<string>;
   setCloseBehavior(behavior: string): Promise<void>;
 
+  // Permission mode
+  getPermissionMode(): Promise<'ask' | 'allow_all'>;
+  setPermissionMode(mode: 'ask' | 'allow_all'): Promise<void>;
+
   // App close dialog
   onCloseRequested?(callback: () => void): () => void;
   respondToClose?(decision: 'keep-daemon' | 'stop-daemon' | 'cancel'): void;

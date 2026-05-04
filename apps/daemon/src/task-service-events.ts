@@ -3,6 +3,7 @@
  * Extracted from task-service.ts to keep files under 200 lines.
  */
 import type { TaskMessage, TaskStatus, AccomplishRuntime } from '@accomplish_ai/agent-core';
+import type { SettingsService } from './settings-service.js';
 
 export interface TaskServiceEvents {
   progress: [data: { taskId: string; stage: string; message?: string }];
@@ -21,6 +22,10 @@ export interface TaskServiceOptions {
   resourcesPath?: string;
   appPath?: string;
   accomplishRuntime?: AccomplishRuntime;
+  /**
+   * Settings service for reading app configuration like permission mode.
+   */
+  settingsService: SettingsService;
   /**
    * Optional RPC-connectivity probe used by the no-UI auto-deny policy in
    * `task-callbacks.ts` (Phase 2 of the SDK cutover port). The daemon wires

@@ -513,6 +513,18 @@ export function registerRpcMethods(services: RouteServices): void {
     'settings.getCloseBehavior',
     safeHandler(() => Promise.resolve(settingsService.getCloseBehavior())),
   );
+  rpc.registerMethod(
+    'settings.setPermissionMode',
+    safeHandler((params) => {
+      const v = validate(z.object({ mode: z.enum(['ask', 'allow_all']) }), params);
+      settingsService.setPermissionMode(v.mode);
+      return Promise.resolve();
+    }),
+  );
+  rpc.registerMethod(
+    'settings.getPermissionMode',
+    safeHandler(() => Promise.resolve(settingsService.getPermissionMode())),
+  );
   // Sandbox / cloud-browser / messaging configs are typed objects; their
   // Zod schemas would duplicate the TypeScript types. Pass-through `.unknown()`
   // for the config payload and trust the type at the call site — misuse

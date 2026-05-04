@@ -61,6 +61,8 @@ import {
   setCloseBehavior,
   getLanguage,
   setLanguage,
+  getPermissionMode,
+  setPermissionMode,
 } from '../storage/repositories/appSettings.js';
 import {
   getProviderSettings,
@@ -182,6 +184,8 @@ export function createStorage(options: StorageOptions = {}): StorageAPI {
     setCloseBehavior: (behavior) => setCloseBehavior(behavior),
     getLanguage: () => getLanguage(),
     setLanguage: (language) => setLanguage(language),
+    getPermissionMode: () => getPermissionMode(),
+    setPermissionMode: (mode) => setPermissionMode(mode),
 
     // Provider Settings
     getProviderSettings: () => getProviderSettings(),

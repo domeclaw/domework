@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { NotificationsSection } from '@/components/settings/NotificationsSection';
+import { PermissionSection } from '@/components/settings/PermissionSection';
 import { DebugSection } from '@/components/settings/DebugSection';
 import { DaemonSection } from '@/components/settings/DaemonSection';
 import { ThemeSelector } from '@/components/settings/ThemeSelector';
@@ -8,6 +9,8 @@ import { LanguageSelector } from '@/components/settings/LanguageSelector';
 interface GeneralTabProps {
   notificationsEnabled: boolean;
   onNotificationsToggle: () => void;
+  permissionMode: 'ask' | 'allow_all';
+  onPermissionModeToggle: () => void;
   debugMode: boolean;
   onDebugToggle: () => void;
 }
@@ -15,6 +18,8 @@ interface GeneralTabProps {
 export function GeneralTab({
   notificationsEnabled,
   onNotificationsToggle,
+  permissionMode,
+  onPermissionModeToggle,
   debugMode,
   onDebugToggle,
 }: GeneralTabProps) {
@@ -27,6 +32,13 @@ export function GeneralTab({
 
       <section>
         <NotificationsSection enabled={notificationsEnabled} onToggle={onNotificationsToggle} />
+      </section>
+
+      <section>
+        <PermissionSection
+          allowAll={permissionMode === 'allow_all'}
+          onToggle={onPermissionModeToggle}
+        />
       </section>
 
       <section>

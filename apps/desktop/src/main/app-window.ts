@@ -2,12 +2,24 @@
  * BrowserWindow creation and configuration.
  * Extracted from index.ts to keep main entry point under 200 lines.
  */
-import { app, BrowserWindow, shell, nativeImage, nativeTheme, Menu } from 'electron';
+import { app, BrowserWindow, shell, nativeImage, nativeTheme, Menu, screen } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { getLogCollector } from './logging';
+import Store from 'electron-store';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Initialize electron-store for persisting window state
+const store = new Store<{
+  windowBounds?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    isMaximized?: boolean;
+  };
+}>();
 
 function logMain(level: 'INFO' | 'WARN' | 'ERROR', msg: string) {
   try {
@@ -45,7 +57,9 @@ export function createMainWindow(opts: {
   const preloadPath = getPreloadPath();
   logMain('INFO', `[Main] Using preload script: ${preloadPath}`);
 
-  const mainWindow = new BrowserWindow({
+  // Restore window bounds from previous session
+  const savedBounds = store.get('windowBounds');
+  const windowOptions: Electron.BrowserWindowConstructorOptions = {
     width: 1280,
     height: 800,
     minWidth: 900,
@@ -61,7 +75,36 @@ export function createMainWindow(opts: {
       contextIsolation: true,
       spellcheck: true,
     },
-  });
+  };
+
+  // Apply saved bounds if available and valid
+  if (savedBounds) {
+    // Verify that saved bounds are within current display bounds
+    const primaryDisplay = screen.getPrimaryDisplay();
+    const { width: screenWidth, height: screenHeight } = primaryDisplay.workAreaSize;
+
+    if (
+      savedBounds.x >= 0 &&
+      savedBounds.y >= 0 &&
+      savedBounds.x + savedBounds.width <= screenWidth + 100 &&
+      savedBounds.y + savedBounds.height <= screenHeight + 100 &&
+      savedBounds.width >= 900 &&
+      savedBounds.height >= 600
+    ) {
+      windowOptions.x = savedBounds.x;
+      windowOptions.y = savedBounds.y;
+      windowOptions.width = savedBounds.width;
+      windowOptions.height = savedBounds.height;
+      logMain(
+        'INFO',
+        `[Main] Restored window bounds: ${savedBounds.width}x${savedBounds.height} at ${savedBounds.x},${savedBounds.y}`,
+      );
+    } else {
+      logMain('INFO', '[Main] Saved window bounds out of range, using defaults');
+    }
+  }
+
+  const mainWindow = new BrowserWindow(windowOptions);
 
   mainWindow.webContents.on('context-menu', (_event, params) => {
     if (!params.misspelledWord) {
@@ -89,7 +132,24 @@ export function createMainWindow(opts: {
     return { action: 'deny' };
   });
 
-  mainWindow.maximize();
+  // Save window bounds when resized or moved
+  const saveBounds = () => {
+    const bounds = mainWindow.getBounds();
+    store.set('windowBounds', {
+      ...bounds,
+      isMaximized: mainWindow.isMaximized(),
+    });
+  };
+
+  mainWindow.on('resize', saveBounds);
+  mainWindow.on('move', saveBounds);
+  mainWindow.on('close', saveBounds);
+
+  // Restore maximized state if it was maximized when closed
+  if (savedBounds?.isMaximized) {
+    mainWindow.maximize();
+    logMain('INFO', '[Main] Restored maximized state');
+  }
 
   const isE2EMode = (global as Record<string, unknown>).E2E_SKIP_AUTH === true;
   if (!app.isPackaged && !isE2EMode && process.env.NODE_ENV !== 'test') {

@@ -30,6 +30,7 @@ export function useSettingsDialog({
   const [skillsRefreshTrigger, setSkillsRefreshTrigger] = useState(0);
   const [debugMode, setDebugModeState] = useState(false);
   const [notificationsEnabled, setNotificationsEnabledState] = useState(true);
+  const [permissionMode, setPermissionModeState] = useState<'ask' | 'allow_all'>('ask');
 
   const {
     settings,
@@ -49,6 +50,7 @@ export function useSettingsDialog({
     refetch();
     accomplish.getDebugMode().then(setDebugModeState);
     accomplish.getNotificationsEnabled().then(setNotificationsEnabledState);
+    accomplish.getPermissionMode().then(setPermissionModeState);
     accomplish.getVersion().then(setAppVersion);
   }, [open, refetch, accomplish]);
 
@@ -170,6 +172,12 @@ export function useSettingsDialog({
     setNotificationsEnabledState(newValue);
   }, [notificationsEnabled, accomplish]);
 
+  const handlePermissionModeToggle = useCallback(async () => {
+    const newValue: 'ask' | 'allow_all' = permissionMode === 'ask' ? 'allow_all' : 'ask';
+    await accomplish.setPermissionMode(newValue);
+    setPermissionModeState(newValue);
+  }, [permissionMode, accomplish]);
+
   const handleDone = useCallback(() => {
     if (!settings) {
       return;
@@ -227,6 +235,7 @@ export function useSettingsDialog({
     setSkillsRefreshTrigger,
     debugMode,
     notificationsEnabled,
+    permissionMode,
     handleOpenChange,
     handleSelectProvider,
     handleConnect,
@@ -235,6 +244,7 @@ export function useSettingsDialog({
     handleModelChange,
     handleDebugToggle,
     handleNotificationsToggle,
+    handlePermissionModeToggle,
     handleDone,
     handleForceClose,
   };

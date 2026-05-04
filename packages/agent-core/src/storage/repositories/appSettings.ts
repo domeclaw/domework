@@ -72,6 +72,7 @@ interface AppSettingsRow {
   messaging_config: string | null;
   notifications_enabled: number;
   nim_config: string | null;
+  permission_mode: string;
 }
 
 export interface AppSettings {
@@ -86,6 +87,7 @@ export interface AppSettings {
   openaiBaseUrl: string;
   theme: ThemePreference;
   language: LanguagePreference;
+  permissionMode: 'ask' | 'allow_all';
 }
 
 const VALID_THEMES_LOCAL: ThemePreference[] = ['system', 'light', 'dark'];
@@ -171,7 +173,18 @@ export function getAppSettings(): AppSettings {
       ? (row.theme as ThemePreference)
       : 'system',
     language: _getLanguage(),
+    permissionMode: row.permission_mode === 'allow_all' ? 'allow_all' : 'ask',
   };
+}
+
+export function getPermissionMode(): 'ask' | 'allow_all' {
+  const row = getRow();
+  return row.permission_mode === 'allow_all' ? 'allow_all' : 'ask';
+}
+
+export function setPermissionMode(mode: 'ask' | 'allow_all'): void {
+  const db = getDatabase();
+  db.prepare('UPDATE app_settings SET permission_mode = ? WHERE id = 1').run(mode);
 }
 
 export function clearAppSettings(): void {
@@ -192,7 +205,8 @@ export function clearAppSettings(): void {
       sandbox_config = '${JSON.stringify(DEFAULT_SANDBOX_CONFIG)}',
       cloud_browser_config = NULL,
       messaging_config = NULL,
-      notifications_enabled = 1
+      notifications_enabled = 1,
+      permission_mode = 'ask'
     WHERE id = 1`,
   ).run();
 }

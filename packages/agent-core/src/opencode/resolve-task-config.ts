@@ -149,6 +149,9 @@ export async function resolveTaskConfig(
   // 3. Resolve connectors with token refresh
   const connectors = await resolveConnectors(storage, log);
 
+  // 3b. Resolve built-in connectors (Notion, Slack, GitHub, etc.)
+  const builtinConnectors = await resolveBuiltInConnectors(storage, database, log);
+
   // 4. Resolve cloud browser config
   const browser = resolveCloudBrowser(storage);
 
@@ -222,7 +225,10 @@ export async function resolveTaskConfig(
       authToken,
       model: modelOverride?.model,
       smallModel: modelOverride?.smallModel,
-      connectors: connectors.length > 0 ? connectors : undefined,
+      connectors:
+        connectors.length > 0 || builtinConnectors.length > 0
+          ? [...connectors, ...builtinConnectors]
+          : undefined,
       browser,
       knowledgeInstructions,
       knowledgeContext,
@@ -257,10 +263,19 @@ async function resolveConnectors(
   log: (level: 'INFO' | 'WARN' | 'ERROR', message: string, data?: Record<string, unknown>) => void,
 ): Promise<Array<{ id: string; name: string; url: string; accessToken: string }>> {
   const enabledConnectors = storage.getEnabledConnectors();
+  log('INFO', `[resolveConnectors] Found ${enabledConnectors.length} enabled connectors`, {
+    connectors: enabledConnectors.map((c) => ({
+      id: c.id,
+      name: c.name,
+      status: c.status,
+      url: c.url,
+    })),
+  });
   const result: Array<{ id: string; name: string; url: string; accessToken: string }> = [];
 
   for (const connector of enabledConnectors) {
     if (connector.status !== 'connected') {
+      log('WARN', `[resolveConnectors] Skipping ${connector.name} - status is ${connector.status}`);
       continue;
     }
 
@@ -305,6 +320,69 @@ async function resolveConnectors(
   }
 
   return result;
+}
+
+async function resolveBuiltInConnectors(
+  storage: StorageAPI,
+  _database: Database | undefined,
+  log: (level: 'INFO' | 'WARN' | 'ERROR', message: string, data?: Record<string, unknown>) => void,
+): Promise<Array<{ id: string; name: string; url: string; accessToken: string }>> {
+  // Built-in connectors that have MCP server URLs
+  const builtinConnectorKeys = [
+    'notion',
+    'slack',
+    'github',
+    'jira',
+    'monday',
+    'lightdash',
+    'datadog',
+  ];
+  const result: Array<{ id: string; name: string; url: string; accessToken: string }> = [];
+
+  for (const key of builtinConnectorKeys) {
+    try {
+      const authEntry = storage.get(authEntryKey(key));
+      log(
+        'INFO',
+        `[resolveBuiltInConnectors] Checking ${key}: ${authEntry ? 'found' : 'not found'}`,
+      );
+      if (!authEntry) {
+        continue;
+      }
+
+      const entry = JSON.parse(authEntry) as { accessToken?: string; serverUrl?: string };
+      log(
+        'INFO',
+        `[resolveBuiltInConnectors] ${key} entry: accessToken=${!!entry.accessToken}, serverUrl=${!!entry.serverUrl}`,
+      );
+      if (!entry.accessToken || !entry.serverUrl) {
+        log(
+          'INFO',
+          `[resolveBuiltInConnectors] Skipping ${key} - missing accessToken or serverUrl`,
+        );
+        continue;
+      }
+
+      const displayName = key.charAt(0).toUpperCase() + key.slice(1);
+      result.push({
+        id: `builtin-${key}`,
+        name: displayName,
+        url: entry.serverUrl,
+        accessToken: entry.accessToken,
+      });
+      log('INFO', `[resolveBuiltInConnectors] Added ${displayName} connector`);
+    } catch (err) {
+      log('WARN', `[resolveBuiltInConnectors] Failed to parse ${key} auth entry`, {
+        err: String(err),
+      });
+    }
+  }
+
+  return result;
+}
+
+function authEntryKey(connectorKey: string): string {
+  return `connector-auth:${connectorKey}`;
 }
 
 function resolveCloudBrowser(storage: StorageAPI): BrowserConfig | undefined {

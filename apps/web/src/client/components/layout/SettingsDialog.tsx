@@ -220,6 +220,8 @@ export function SettingsDialog({
                 <GeneralTab
                   notificationsEnabled={s.notificationsEnabled}
                   onNotificationsToggle={s.handleNotificationsToggle}
+                  permissionMode={s.permissionMode}
+                  onPermissionModeToggle={s.handlePermissionModeToggle}
                   debugMode={s.debugMode}
                   onDebugToggle={s.handleDebugToggle}
                 />
