@@ -6,7 +6,7 @@ interface CustomProviderInputsProps {
   modelName: string;
   connecting: boolean;
   error: string | null;
-  onBaseUrlChange: (value: string) => void;
+  _onBaseUrlChange: (value: string) => void;
   onApiKeyChange: (value: string) => void;
   onModelNameChange: (value: string) => void;
   onConnect: () => void;
@@ -18,7 +18,7 @@ export function CustomProviderInputs({
   modelName,
   connecting,
   error,
-  onBaseUrlChange,
+  _onBaseUrlChange,
   onApiKeyChange,
   onModelNameChange,
   onConnect,
@@ -33,14 +33,11 @@ export function CustomProviderInputs({
           id="custom-base-url"
           type="text"
           value={baseUrl}
-          onChange={(e) => onBaseUrlChange(e.target.value)}
-          placeholder="https://api.example.com/v1"
+          readOnly
           data-testid="custom-base-url"
-          className="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm"
+          className="w-full rounded-md border border-input bg-muted px-3 py-2.5 text-sm text-muted-foreground cursor-not-allowed"
         />
-        <p className="mt-1 text-xs text-muted-foreground">
-          Base URL ending in /v1 (the SDK appends /chat/completions)
-        </p>
+        <p className="mt-1 text-xs text-muted-foreground">Tokenine QWEN endpoint (fixed)</p>
       </div>
 
       <div>
@@ -89,12 +86,12 @@ export function CustomProviderInputs({
           type="text"
           value={modelName}
           onChange={(e) => onModelNameChange(e.target.value)}
-          placeholder="gpt-4, llama-3, etc."
+          placeholder="qwen3.6-plus"
           data-testid="custom-model-name"
           className="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm"
         />
         <p className="mt-1 text-xs text-muted-foreground">
-          Model ID as expected by the endpoint (e.g., gpt-4, openai/gpt-5.2-codex)
+          Model ID as expected by the endpoint (default: qwen3.6-plus)
         </p>
       </div>
 

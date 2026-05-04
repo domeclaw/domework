@@ -288,9 +288,10 @@ async function getBuiltinPage(fullName: string): Promise<Page> {
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    // DISABLED: Keep browser visible for demo — use foreground instead of background-normal.
     // launchIntent 'background-normal' ensures the page window starts minimized.
     // The in-app screencast preview is the sole visual surface by default.
-    body: JSON.stringify({ name: fullName, launchIntent: 'background-normal' }),
+    body: JSON.stringify({ name: fullName, launchIntent: 'foreground' }),
   });
   if (!res.ok) {
     throw new Error(`Failed to get page "${fullName}": ${res.status}`);

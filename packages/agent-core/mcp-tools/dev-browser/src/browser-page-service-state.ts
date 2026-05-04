@@ -68,24 +68,28 @@ export function createPageEntry(createdPage: CreatedTaskPage): PageEntry {
 }
 
 export function resolveRequestedLaunchIntent(
-  launchIntent: PageLaunchIntent | undefined,
-  keepForegroundUntilFirstFrame: boolean | undefined,
-  headless: boolean,
+  _launchIntent: PageLaunchIntent | undefined,
+  _keepForegroundUntilFirstFrame: boolean | undefined,
+  _headless: boolean,
 ): PageLaunchIntent {
-  if (launchIntent) return launchIntent;
-  if (keepForegroundUntilFirstFrame && !headless) return 'foreground';
-  return 'background-normal';
+  if (_launchIntent) return _launchIntent;
+  // DISABLED: Always keep browser visible for demo
+  // if (keepForegroundUntilFirstFrame && !headless) return 'foreground';
+  // return 'background-normal';
+  return 'foreground';
 }
 
-export function shouldLaunchMinimizedOnce(options: {
+export function shouldLaunchMinimizedOnce(_options: {
   launchIntent: PageLaunchIntent;
   hasReleasedPageUrl: boolean;
   hasKnownTaskPage: boolean;
 }): boolean {
-  return (
-    options.launchIntent === 'browser-tool-open' &&
-    (options.hasReleasedPageUrl || !options.hasKnownTaskPage)
-  );
+  // DISABLED: Never minimize — keep browser visible for demo
+  return false;
+  // return (
+  //   options.launchIntent === 'browser-tool-open' &&
+  //   (options.hasReleasedPageUrl || !options.hasKnownTaskPage)
+  // );
 }
 
 export function selectReusableStartupPage(

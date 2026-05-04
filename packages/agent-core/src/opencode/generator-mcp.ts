@@ -212,6 +212,10 @@ export function buildMcpServers(options: BuildMcpServersOptions): Record<string,
 
   if (connectors) {
     for (const connector of connectors) {
+      // Skip CLI-based connectors (e.g., GitHub uses gh CLI, not remote MCP)
+      if (!connector.url || connector.url.trim() === '') {
+        continue;
+      }
       const sanitized = connector.name
         .toLowerCase()
         .replace(/[^a-z0-9]/g, '-')

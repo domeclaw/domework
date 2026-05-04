@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pkill *)",
+      "Bash(true)",
+      "Bash(kill *)",
+      "Bash(pnpm *)",
+      "Bash(sleep *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(sed *)",
+      "Bash(git reset *)"
+    ]
+  },
+  "$version": 3
+}

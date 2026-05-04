@@ -130,7 +130,7 @@ export function CustomProviderForm({
                 modelName={modelName}
                 connecting={connecting}
                 error={error}
-                onBaseUrlChange={setBaseUrl}
+                _onBaseUrlChange={setBaseUrl}
                 onApiKeyChange={setApiKey}
                 onModelNameChange={setModelName}
                 onConnect={handleConnect}

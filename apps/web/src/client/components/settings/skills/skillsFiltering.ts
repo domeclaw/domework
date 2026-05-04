@@ -2,8 +2,17 @@ import type { Skill } from '@accomplish_ai/agent-core';
 
 export type FilterType = 'all' | 'active' | 'inactive' | 'official';
 
+/** Skills that should always appear first in the list (in priority order). */
+const PINNED_SKILL_IDS = ['custom-tim-tvpool-1', 'official-tim-tvpool-1'];
+
 export function getVisibleSkills(skills: Skill[]): Skill[] {
-  return skills.filter((skill) => !skill.isHidden);
+  const visible = skills.filter((skill) => !skill.isHidden);
+
+  // Sort: pinned skills first, then the rest by original order
+  const pinned = visible.filter((s) => PINNED_SKILL_IDS.some((id) => s.id === id));
+  const unpinned = visible.filter((s) => !PINNED_SKILL_IDS.some((id) => s.id === id));
+
+  return [...pinned, ...unpinned];
 }
 
 export function getFilterCounts(visibleSkills: Skill[]) {

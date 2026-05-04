@@ -28,7 +28,7 @@ import {
   getCDPSession,
   getFullPageName,
   focusPageWindow,
-  backgroundPageWindow,
+  // backgroundPageWindow, // DISABLED: Keep browser visible for demo
 } from './connection.js';
 import { detectAuthPage } from './auth-detection.js';
 
@@ -75,10 +75,12 @@ async function checkInteractionMode(page: Page, pageName?: string): Promise<void
     if (detection.isAuthPage && !interactionModePages.has(fullName)) {
       interactionModePages.add(fullName);
       await focusPageWindow(pageName);
-    } else if (!detection.isAuthPage && interactionModePages.has(fullName)) {
-      interactionModePages.delete(fullName);
-      await backgroundPageWindow(pageName);
     }
+    // DISABLED: Never minimize — keep browser visible for demo
+    // else if (!detection.isAuthPage && interactionModePages.has(fullName)) {
+    //   interactionModePages.delete(fullName);
+    //   await backgroundPageWindow(pageName);
+    // }
   } catch {
     // best-effort — window management must never break the tool call
   }
