@@ -267,10 +267,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Download Node.js binaries
-        run: pnpm -F @accomplish/desktop download:nodejs
+        run: pnpm -F @domework/desktop download:nodejs
 
       - name: Build desktop app
-        run: pnpm -F @accomplish/desktop build
+        run: pnpm -F @domework/desktop build
 
       - name: Package (unsigned)
         run: node scripts/package.cjs --mac --arm64 --publish never
@@ -318,10 +318,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Download Node.js binaries
-        run: pnpm -F @accomplish/desktop download:nodejs
+        run: pnpm -F @domework/desktop download:nodejs
 
       - name: Build desktop app
-        run: pnpm -F @accomplish/desktop build
+        run: pnpm -F @domework/desktop build
 
       - name: Package (unsigned)
         run: node scripts/package.cjs --mac --x64 --publish never
@@ -370,10 +370,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Download Node.js binaries
-        run: pnpm -F @accomplish/desktop download:nodejs
+        run: pnpm -F @domework/desktop download:nodejs
 
       - name: Build desktop app
-        run: pnpm -F @accomplish/desktop build
+        run: pnpm -F @domework/desktop build
 
       - name: Package (unsigned)
         run: node scripts/package.cjs --linux --arm64 --publish never
@@ -418,10 +418,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Download Node.js binaries
-        run: pnpm -F @accomplish/desktop download:nodejs
+        run: pnpm -F @domework/desktop download:nodejs
 
       - name: Build desktop app
-        run: pnpm -F @accomplish/desktop build
+        run: pnpm -F @domework/desktop build
 
       - name: Package (unsigned)
         run: node scripts/package.cjs --linux --x64 --publish never
@@ -462,10 +462,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Download Node.js binaries
-        run: pnpm -F @accomplish/desktop download:nodejs --platform=win32-x64
+        run: pnpm -F @domework/desktop download:nodejs --platform=win32-x64
 
       - name: Build desktop app
-        run: pnpm -F @accomplish/desktop build
+        run: pnpm -F @domework/desktop build
 
       - name: Package (unsigned)
         run: node scripts/package.cjs --win --x64 --publish never
