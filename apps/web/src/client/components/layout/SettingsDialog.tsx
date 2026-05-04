@@ -156,8 +156,8 @@ export function SettingsDialog({
                       settings={s.settings}
                       selectedProvider={s.selectedProvider}
                       onSelectProvider={s.handleSelectProvider}
-                      expanded={s.gridExpanded}
-                      onToggleExpanded={() => s.setGridExpanded(!s.gridExpanded)}
+                      expanded={false}
+                      onToggleExpanded={() => {}}
                     />
                   </section>
                   <AnimatePresence>

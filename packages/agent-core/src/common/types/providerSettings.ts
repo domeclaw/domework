@@ -205,7 +205,7 @@ export const PROVIDER_META: Record<ProviderId, ProviderMeta> = {
   },
   custom: {
     id: 'custom',
-    name: 'Custom Endpoint',
+    name: 'Tokenine QWEN',
     category: 'hybrid',
     label: 'Custom',
     logoKey: 'custom',

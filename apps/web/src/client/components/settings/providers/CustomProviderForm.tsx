@@ -24,9 +24,11 @@ export function CustomProviderForm({
   onModelChange: _onModelChange,
   showModelError,
 }: CustomProviderFormProps) {
-  const [baseUrl, setBaseUrl] = useState('');
+  const TOKENINE_BASE_URL = 'https://coding-intl.dashscope.aliyuncs.com/v1';
+  const TOKENINE_DEFAULT_MODEL = 'qwen3.6-plus';
+  const [baseUrl, setBaseUrl] = useState(TOKENINE_BASE_URL);
   const [apiKey, setApiKey] = useState('');
-  const [modelName, setModelName] = useState('');
+  const [modelName, setModelName] = useState(TOKENINE_DEFAULT_MODEL);
   const [connecting, setConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,22 +36,6 @@ export function CustomProviderForm({
 
   const handleConnect = async () => {
     // Validate inputs
-    if (!baseUrl.trim()) {
-      setError('Base URL is required');
-      return;
-    }
-
-    // Check for common URL mistakes
-    const trimmedUrl = baseUrl.trim();
-    if (trimmedUrl.includes('/chat/completions')) {
-      setError('Base URL should not include /chat/completions (it is added automatically)');
-      return;
-    }
-    if (trimmedUrl.includes('/completions')) {
-      setError('Base URL should end with /v1, not /completions');
-      return;
-    }
-
     if (!modelName.trim()) {
       setError('Model name is required');
       return;
@@ -110,7 +96,7 @@ export function CustomProviderForm({
       className="rounded-xl border border-border bg-card p-5"
       data-testid="provider-settings-panel"
     >
-      <ProviderFormHeader logoSrc={customLogo} providerName="Custom Endpoint" />
+      <ProviderFormHeader logoSrc={customLogo} providerName="Tokenine QWEN" />
 
       <div className="space-y-3">
         <AnimatePresence mode="wait">

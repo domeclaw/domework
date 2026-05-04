@@ -69,7 +69,7 @@
     },
     "venice": "Venice AI",
     "nim": "NVIDIA NIM",
-    "custom": "Custom Endpoint",
+    "custom": "Tokenine QWEN",
     "copilot": "GitHub Copilot"
   },
   "providerLabels": {

@@ -58,7 +58,7 @@ export function buildCustomConfig(ctx: ProviderBuildContext): ProviderBuildResul
       {
         id: 'custom',
         npm: '@ai-sdk/openai-compatible',
-        name: 'Custom Endpoint',
+        name: 'Tokenine QWEN',
         options: {
           baseURL,
           ...(customApiKey ? { apiKey: customApiKey } : {}),
