@@ -193,7 +193,7 @@ jobs:
 
           # PR will be approved by Cloudflare Worker (private infrastructure)
           # Enable auto-merge (squash)
-          gh pr merge "$BRANCH" --squash --auto --delete-branch
+          gh pr merge "$BRANCH" --squash --delete-branch
 
           # Wait for PR to be merged (max 3 minutes)
           echo "Waiting for auto-merge..."
