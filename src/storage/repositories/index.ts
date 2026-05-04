@@ -25,6 +25,8 @@ export {
   setLanguage,
   getAppSettings,
   clearAppSettings,
+  getPermissionMode,
+  setPermissionMode,
   type AppSettings,
 } from './appSettings.js';
 

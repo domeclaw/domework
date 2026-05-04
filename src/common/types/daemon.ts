@@ -280,6 +280,8 @@ export interface SettingsSnapshot {
   cloudBrowserConfig: CloudBrowserConfig | null;
   /** Messaging integration config (null if not configured). */
   messagingConfig: MessagingConfig | null;
+  /** Permission auto-approval mode. */
+  permissionMode: 'ask' | 'allow_all';
   /** NVIDIA NIM provider config — NOT in `AppSettings`, so carried separately. */
   nimConfig: NimConfig | null;
 }
@@ -502,6 +504,14 @@ export interface DaemonMethodMap {
   'settings.getCloseBehavior': {
     params: undefined;
     result: 'keep-daemon' | 'stop-daemon';
+  };
+  'settings.setPermissionMode': {
+    params: { mode: 'ask' | 'allow_all' };
+    result: void;
+  };
+  'settings.getPermissionMode': {
+    params: undefined;
+    result: 'ask' | 'allow_all';
   };
   'settings.setSandboxConfig': { params: { config: SandboxConfig }; result: void };
   'settings.getSandboxConfig': { params: undefined; result: SandboxConfig };

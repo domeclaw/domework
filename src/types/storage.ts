@@ -203,6 +203,10 @@ export interface AppSettingsAPI {
   getLanguage(): LanguagePreference;
   /** Set the user's UI language preference */
   setLanguage(language: LanguagePreference): void;
+  /** Get permission auto-approval mode */
+  getPermissionMode(): 'ask' | 'allow_all';
+  /** Set permission auto-approval mode */
+  setPermissionMode(mode: 'ask' | 'allow_all'): void;
   /** Get all application settings as a snapshot */
   getAppSettings(): AppSettings;
   /** Reset all application settings to defaults */
