@@ -327,16 +327,9 @@ async function resolveBuiltInConnectors(
   _database: Database | undefined,
   log: (level: 'INFO' | 'WARN' | 'ERROR', message: string, data?: Record<string, unknown>) => void,
 ): Promise<Array<{ id: string; name: string; url: string; accessToken: string }>> {
-  // Built-in connectors that have MCP server URLs
-  const builtinConnectorKeys = [
-    'notion',
-    'slack',
-    'github',
-    'jira',
-    'monday',
-    'lightdash',
-    'datadog',
-  ];
+  // Built-in connectors that use MCP server URLs
+  // Note: GitHub is CLI-based (gh) and handled separately by OpenCode - not included here
+  const builtinConnectorKeys = ['notion', 'slack', 'jira', 'monday', 'lightdash', 'datadog'];
   const result: Array<{ id: string; name: string; url: string; accessToken: string }> = [];
 
   for (const key of builtinConnectorKeys) {

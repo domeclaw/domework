@@ -60,9 +60,9 @@ export async function serve(options: ServeOptions = {}): Promise<DevBrowserServe
             ],
           });
           usedSystemChrome = true;
-          console.log('Using system Chrome');
-        } catch {
-          console.log('System Chrome not available, falling back to Playwright Chromium...');
+          console.log(`Using system Chrome with CDP port ${cdpPort}`);
+        } catch (err) {
+          console.log(`System Chrome not available, falling back to Playwright Chromium: ${err}`);
         }
       }
 
@@ -97,11 +97,12 @@ export async function serve(options: ServeOptions = {}): Promise<DevBrowserServe
       const blankStartup = startupPages.find((p) => p.url() === 'about:blank') ?? null;
       if (blankStartup) {
         pageService.attachStartupPage(blankStartup);
+        // DISABLED: Keep browser visible for demo — do not minimize
         // Minimize the blank startup tab immediately so no Chrome window appears.
         // Fire-and-forget: a CDP timing error here (Browser.getWindowForTarget not yet ready)
         // must NOT reject _launchPromise — that would make every subsequent POST /pages
         // throw immediately with a 500.  Window minimization is best-effort.
-        void pageService.backgroundPage(blankStartup, browserContext!).catch(() => {});
+        // void pageService.backgroundPage(blankStartup, browserContext!).catch(() => {});
       }
 
       // Reset cached state when the browser context closes so ensureBrowserContext()
