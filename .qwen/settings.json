@@ -13,7 +13,8 @@
       "Bash(rm *)",
       "Bash(find *)",
       "Bash(ls *)",
-      "Bash(git tag *)"
+      "Bash(git tag *)",
+      "Bash(killall *)"
     ]
   },
   "$version": 3
