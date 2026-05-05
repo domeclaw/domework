@@ -383,8 +383,8 @@ jobs:
         with:
           name: Domework-Linux-x64
           path: |
-            apps/desktop/release/*-x64.AppImage
-            apps/desktop/release/*-x64.deb
+            apps/desktop/release/*-x86_64.AppImage
+            apps/desktop/release/*-amd64.deb
           retention-days: 30
 
   build-windows-x64:
