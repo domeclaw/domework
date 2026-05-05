@@ -25,6 +25,13 @@ This file defines the working rules for the AI assistant when working on this co
    - Propose a draft commit message
    - Wait for explicit user approval before committing
 
+7. **Version Tagging**: When the user asks to tag a version (e.g., `tag 1.0.6`, `tag v1.0.6`, `release 1.0.6`):
+   - Update `"version"` in `apps/desktop/package.json` to match the requested version (strip the `v` prefix if present)
+   - Commit the version change with message: `chore(release): bump version to <version>`
+   - Push the commit to `main`
+   - Create and push the git tag (with `v` prefix, e.g., `v1.0.6`)
+   - The GitHub Actions `release.yml` will then trigger the build and release
+
 ---
 
 ## Summary

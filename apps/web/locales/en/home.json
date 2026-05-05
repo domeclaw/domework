@@ -27,10 +27,10 @@
   },
   "examplePrompts": "Example Prompts",
   "useCases": {
-    "calendarPrepNotes": {
-      "title": "Calendar Prep Notes",
-      "description": "Review tomorrow's meetings and draft a prep notes doc.",
-      "prompt": "Check my Google Calendar for tomorrow's meetings and draft preparation notes in a new Google Doc."
+    "timTVPoolNews": {
+      "title": "Entertainment News",
+      "description": "Write entertainment news in TVPool style.",
+      "prompt": "Always open a browser — do not use any search API. Follow entertainment news trends on Facebook and Twitter (X.com), then write an entertainment news article in Thai and save it as an MD file."
     },
     "inboxPromoCleanup": {
       "title": "Inbox Promo Cleanup",

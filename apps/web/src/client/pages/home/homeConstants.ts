@@ -1,5 +1,5 @@
 export const USE_CASE_KEYS = [
-  { key: 'calendarPrepNotes', icons: ['calendar.google.com', 'docs.google.com'] },
+  { key: 'timTVPoolNews', icons: [] },
   { key: 'inboxPromoCleanup', icons: ['mail.google.com'] },
   { key: 'competitorPricingDeck', icons: ['slides.google.com', 'sheets.google.com'] },
   { key: 'notionApiAudit', icons: ['notion.so'] },
