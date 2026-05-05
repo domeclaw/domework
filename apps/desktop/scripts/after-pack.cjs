@@ -256,6 +256,12 @@ async function resignMacApp(context) {
   console.log(`[after-pack] Re-signing macOS app: ${appPath}`);
 
   try {
+    // Update ElectronAsarIntegrity hash in Info.plist before re-signing.
+    // Copying Node.js binaries into the app bundle modifies the asar archive,
+    // which changes its hash. Electron verifies this hash at startup and will
+    // refuse to launch if it doesn't match the value in Info.plist.
+    updateAsarIntegrityHash(appPath);
+
     // Remove existing signature and re-sign with ad-hoc signature
     // --force: replace existing signature
     // --deep: sign all nested code (frameworks, helpers, etc.)
@@ -268,5 +274,71 @@ async function resignMacApp(context) {
     console.error('[after-pack] Failed to re-sign macOS app:', err.message);
     // Don't fail the build - unsigned apps still work locally
     // and users can remove quarantine manually
+  }
+}
+
+/**
+ * Update the ElectronAsarIntegrity hash in Info.plist for macOS apps.
+ *
+ * Electron verifies app.asar integrity via the hash stored in Info.plist.
+ * When we modify the bundle (e.g., copying Node.js binaries), the hash changes.
+ * This function recalculates the SHA-256 hash and updates Info.plist accordingly.
+ *
+ * @param {string} appPath - Path to the .app bundle
+ */
+function updateAsarIntegrityHash(appPath) {
+  const plistPath = path.join(appPath, 'Contents', 'Info.plist');
+  const asarPath = path.join(appPath, 'Contents', 'Resources', 'app.asar');
+
+  if (!fs.existsSync(plistPath)) {
+    console.warn('[after-pack] Info.plist not found, skipping ElectronAsarIntegrity update');
+    return;
+  }
+
+  if (!fs.existsSync(asarPath)) {
+    console.warn('[after-pack] app.asar not found, skipping ElectronAsarIntegrity update');
+    return;
+  }
+
+  console.log(`[after-pack] Updating ElectronAsarIntegrity hash for app.asar`);
+
+  // Calculate SHA-256 hash of app.asar
+  const hashOutput = execSync(`shasum -a 256 "${asarPath}"`, { encoding: 'utf-8' });
+  const newHash = hashOutput.split(' ')[0];
+
+  console.log(`[after-pack] New app.asar SHA-256: ${newHash}`);
+
+  // Read Info.plist as JSON using plutil
+  const jsonPlist = execSync(`plutil -convert json -o - "${plistPath}"`, { encoding: 'utf-8' });
+  const plist = JSON.parse(jsonPlist);
+
+  // Update the hash in ElectronAsarIntegrity
+  if (plist.ElectronAsarIntegrity && plist.ElectronAsarIntegrity['Resources/app.asar']) {
+    const oldHash = plist.ElectronAsarIntegrity['Resources/app.asar'].hash;
+    plist.ElectronAsarIntegrity['Resources/app.asar'].hash = newHash;
+
+    console.log(`[after-pack] Updated ElectronAsarIntegrity hash:`);
+    console.log(`[after-pack]   Old: ${oldHash}`);
+    console.log(`[after-pack]   New: ${newHash}`);
+
+    // Write back as XML plist (Info.plist must be XML format)
+    const tempJsonPath = path.join(appPath, 'Contents', 'Info.plist.temp.json');
+    fs.writeFileSync(tempJsonPath, JSON.stringify(plist, null, 2));
+
+    try {
+      execSync(`plutil -convert xml1 -o "${plistPath}" "${tempJsonPath}"`, { stdio: 'inherit' });
+      fs.unlinkSync(tempJsonPath);
+      console.log('[after-pack] Successfully updated Info.plist ElectronAsarIntegrity hash');
+    } catch (err) {
+      // Cleanup temp file on error
+      try {
+        fs.unlinkSync(tempJsonPath);
+      } catch {
+        // Ignore cleanup errors
+      }
+      throw new Error(`Failed to convert Info.plist back to XML: ${err.message}`);
+    }
+  } else {
+    console.log('[after-pack] No ElectronAsarIntegrity key found in Info.plist, skipping update');
   }
 }
