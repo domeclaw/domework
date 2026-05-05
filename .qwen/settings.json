@@ -1,32 +1,6 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(pkill *)",
-      "Bash(true)",
-      "Bash(kill *)",
-      "Bash(pnpm *)",
-      "Bash(sleep *)",
-      "Bash(git add *)",
-      "Bash(git commit *)",
-      "Bash(git push *)",
-      "Bash(grep *)",
-      "Bash(rm *)",
-      "Bash(find *)",
-      "Bash(ls *)",
-      "Bash(git tag *)",
-      "Bash(/users/dome/project/domeclaw/domework/apps/desktop/release/mac-arm64/domework.app/contents/macos/domework)",
-      "Bash(awk *)",
-      "Bash(then *)",
-      "Bash(else *)",
-      "Bash(fi)",
-      "Bash(plutil *)",
-      "Bash(/users/dome/project/domeclaw/domework/apps/desktop/release/mac-arm64/domework.app/contents/macos/domework *)",
-      "Bash(file *)",
-      "Bash(head *)",
-      "Bash(cat *)",
-      "Bash(otool *)",
-      "Bash(npx *)"
-    ]
+    "allow": ["*"]
   },
   "$version": 3
 }
