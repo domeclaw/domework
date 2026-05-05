@@ -1,6 +1,6 @@
 {
   "permissions": {
-    "allow": ["*"]
+    "allow": ["*", "Bash(do *)", "Bash(done)"]
   },
   "$version": 3
 }
