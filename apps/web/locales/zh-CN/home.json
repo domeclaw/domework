@@ -27,10 +27,10 @@
   },
   "examplePrompts": "示例任务",
   "useCases": {
-    "calendarPrepNotes": {
-      "title": "会议准备笔记",
-      "description": "查看明天的会议并起草准备笔记。",
-      "prompt": "检查我 Google 日历上明天的会议，并在新的 Google 文档中起草准备笔记。"
+    "timTVPoolNews": {
+      "title": "娱乐新闻",
+      "description": "以 TVPool 风格撰写娱乐新闻。",
+      "prompt": "始终打开浏览器——不要使用任何搜索 API。关注 Facebook 和 Twitter（X.com）上的娱乐新闻趋势，然后用泰语撰写娱乐新闻文章并将其保存为 MD 文件。"
     },
     "inboxPromoCleanup": {
       "title": "清理促销邮件",

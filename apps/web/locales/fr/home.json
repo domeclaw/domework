@@ -17,10 +17,10 @@
   },
   "examplePrompts": "Exemples de requêtes",
   "useCases": {
-    "calendarPrepNotes": {
-      "title": "Préparation réunions",
-      "description": "Consultez les réunions de demain et rédigez des notes de préparation.",
-      "prompt": "Consultez mon Google Agenda pour les réunions de demain et rédigez des notes de préparation dans un nouveau Google Doc."
+    "timTVPoolNews": {
+      "title": "Nouvelles de divertissement",
+      "description": "Rédigez des nouvelles de divertissement dans le style TVPool.",
+      "prompt": "Ouvrez toujours un navigateur — n'utilisez aucune API de recherche. Suivez les tendances de l'actualité du divertissement sur Facebook et Twitter (X.com), puis rédigez un article de divertissement en thaïlandais et enregistrez-le au format MD."
     },
     "inboxPromoCleanup": {
       "title": "Nettoyage des promotions",
