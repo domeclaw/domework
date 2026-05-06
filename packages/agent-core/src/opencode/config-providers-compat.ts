@@ -70,6 +70,38 @@ export function buildCustomConfig(ctx: ProviderBuildContext): ProviderBuildResul
   };
 }
 
+export function buildTk9ByteplusConfig(ctx: ProviderBuildContext): ProviderBuildResult {
+  const { providerSettings, getApiKey } = ctx;
+  const tk9Provider = providerSettings.connectedProviders['tk9-byteplus'];
+  if (
+    tk9Provider?.connectionStatus !== 'connected' ||
+    tk9Provider.credentials.type !== 'tk9-byteplus' ||
+    !tk9Provider.selectedModelId
+  ) {
+    return { configs: [], enableToAdd: [] };
+  }
+  const tk9ApiKey = getApiKey('tk9-byteplus');
+  const creds = tk9Provider.credentials;
+  const baseURL = creds.baseUrl.replace(/\/+$/, '');
+  const modelId = tk9Provider.selectedModelId.replace(/^tk9-byteplus\//, '');
+  log.info(`[OpenCode Config Builder] Tokenine Byteplus configured: ${modelId} baseURL: ${baseURL}`);
+  return {
+    configs: [
+      {
+        id: 'tk9-byteplus',
+        npm: '@ai-sdk/openai-compatible',
+        name: 'Tokenine Byteplus',
+        options: {
+          baseURL,
+          ...(tk9ApiKey ? { apiKey: tk9ApiKey } : {}),
+        },
+        models: { [modelId]: { name: modelId, tools: true } },
+      },
+    ],
+    enableToAdd: ['tk9-byteplus'],
+  };
+}
+
 export function buildOpenAICompatibleConfigs(ctx: ProviderBuildContext): ProviderBuildResult {
   const { providerSettings, getApiKey } = ctx;
   const configs = [];

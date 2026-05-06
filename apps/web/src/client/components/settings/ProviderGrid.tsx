@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import type { ProviderId, ProviderSettings } from '@accomplish_ai/agent-core/common';
 import { ProviderCard } from './ProviderCard';
 
-// Provider order — only Custom Endpoint is shown
-const PROVIDER_ORDER: ProviderId[] = ['custom'];
+// Provider order — Tokenine QWEN and Tokenine Byteplus are shown
+const PROVIDER_ORDER: ProviderId[] = ['custom', 'tk9-byteplus'];
 
 interface ProviderGridProps {
   settings: ProviderSettings;

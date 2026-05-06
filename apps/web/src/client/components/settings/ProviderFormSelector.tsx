@@ -12,6 +12,7 @@ import {
   VertexProviderForm,
   HuggingFaceProviderForm,
   CustomProviderForm,
+  Tk9ByteplusProviderForm,
   NimProviderForm,
   CopilotProviderForm,
   AccomplishAiProviderForm,
@@ -189,6 +190,17 @@ export function ProviderFormSelector({
       if (providerId === 'custom') {
         return (
           <CustomProviderForm
+            connectedProvider={connectedProvider}
+            onConnect={onConnect}
+            onDisconnect={onDisconnect}
+            onModelChange={onModelChange}
+            showModelError={showModelError}
+          />
+        );
+      }
+      if (providerId === 'tk9-byteplus') {
+        return (
+          <Tk9ByteplusProviderForm
             connectedProvider={connectedProvider}
             onConnect={onConnect}
             onDisconnect={onDisconnect}

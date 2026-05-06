@@ -22,6 +22,7 @@ import {
 import {
   buildNimConfig,
   buildCustomConfig,
+  buildTk9ByteplusConfig,
   buildOpenAICompatibleConfigs,
   buildCopilotConfig,
 } from './config-providers-compat.js';
@@ -139,6 +140,7 @@ export async function buildProviderConfigs(
     buildAzureFoundryConfig(ctx),
     buildNimConfig(ctx),
     buildCustomConfig(ctx),
+    buildTk9ByteplusConfig(ctx),
     buildOpenAICompatibleConfigs(ctx),
     buildCopilotConfig(ctx),
     buildAccomplishAiConfig(ctx),

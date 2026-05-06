@@ -37,6 +37,7 @@ const PROVIDER_COLORS: Record<string, string> = {
   groq: 'bg-[#F55036]', // Red-orange
   nim: 'bg-[#76B900]', // NVIDIA green
   custom: 'bg-[#6B7280]', // Gray
+  'tk9-byteplus': 'bg-[#0891B2]', // Cyan (distinct from custom gray)
 };
 
 /**
@@ -64,6 +65,7 @@ const PROVIDER_INITIALS: Record<string, string> = {
   groq: 'G',
   nim: 'N',
   custom: 'C',
+  'tk9-byteplus': 'B', // Byteplus
 };
 
 const SIZE_CLASSES = {

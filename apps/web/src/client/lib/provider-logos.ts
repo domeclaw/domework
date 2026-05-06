@@ -25,6 +25,9 @@ import nimLogo from '/assets/ai-logos/nim.svg';
 import copilotLogo from '/assets/ai-logos/copilot.svg';
 import accomplishLogo from '/assets/ai-logos/accomplish.svg';
 
+// Reuse the custom logo for tk9-byteplus (same Tokenine branding)
+import customLogoForTk9 from '/assets/ai-logos/custom.svg';
+
 export const PROVIDER_LOGOS: Record<ProviderId, string> = {
   anthropic: anthropicLogo,
   openai: openaiLogo,
@@ -49,6 +52,7 @@ export const PROVIDER_LOGOS: Record<ProviderId, string> = {
   venice: veniceLogo,
   nim: nimLogo,
   custom: customLogo,
+  'tk9-byteplus': customLogoForTk9,
   copilot: copilotLogo,
   'accomplish-ai': accomplishLogo,
 };

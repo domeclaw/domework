@@ -61,6 +61,8 @@ export {
   STANDARD_VALIDATION_PROVIDERS,
   ZAI_ENDPOINTS,
   COPILOT_MODELS,
+  TK9_BYTEPLUS_DEFAULT_BASE_URL,
+  TK9_BYTEPLUS_DEFAULT_MODEL,
 } from './common/types/provider.js';
 
 // Provider settings types
@@ -82,6 +84,7 @@ export type {
   AzureFoundryCredentials,
   OAuthCredentials,
   CustomCredentials,
+  Tk9ByteplusCredentials,
   ProviderCredentials,
   ToolSupportStatus,
   ConnectedProvider,

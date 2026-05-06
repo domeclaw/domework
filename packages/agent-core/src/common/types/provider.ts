@@ -19,6 +19,7 @@ export type ProviderType =
   | 'zai'
   | 'azure-foundry'
   | 'custom'
+  | 'tk9-byteplus'
   | 'bedrock'
   | 'litellm'
   | 'minimax'
@@ -45,6 +46,7 @@ export type ApiKeyProvider =
   | 'zai'
   | 'azure-foundry'
   | 'custom'
+  | 'tk9-byteplus'
   | 'bedrock'
   | 'litellm'
   | 'minimax'
@@ -77,6 +79,7 @@ export const ALLOWED_API_KEY_PROVIDERS: ReadonlySet<string> = new Set<string>([
   'zai',
   'azure-foundry',
   'custom',
+  'tk9-byteplus',
   'bedrock',
   'litellm',
   'minimax',
@@ -114,6 +117,7 @@ export const STANDARD_VALIDATION_PROVIDERS: ReadonlySet<string> = new Set<string
   'fireworks',
   'groq',
   'venice',
+  'tk9-byteplus',
 ]);
 
 export interface ModelsEndpointConfig {
@@ -228,6 +232,10 @@ export interface HuggingFaceLocalConfig {
   /** Preferred execution device. null means automatic selection. */
   devicePreference: 'auto' | 'cpu' | 'cuda' | 'webgpu' | null;
 }
+
+export const TK9_BYTEPLUS_DEFAULT_BASE_URL =
+  'https://ark.ap-southeast.bytepluses.com/api/coding/v3';
+export const TK9_BYTEPLUS_DEFAULT_MODEL = 'dola-seed-2.0-pro';
 
 export const DEFAULT_PROVIDERS: ProviderConfig[] = [
   {
@@ -503,6 +511,25 @@ export const DEFAULT_PROVIDERS: ProviderConfig[] = [
         contextWindow: 128_000,
         maxOutputTokens: 32_000,
         supportsVision: true,
+      },
+    ],
+  },
+  {
+    id: 'tk9-byteplus',
+    name: 'Tokenine Byteplus',
+    requiresApiKey: true,
+    apiKeyEnvVar: 'TK9_BYTEPLUS_API_KEY',
+    baseUrl: TK9_BYTEPLUS_DEFAULT_BASE_URL,
+    defaultModelId: 'tk9-byteplus/dola-seed-2.0-pro',
+    editableBaseUrl: true,
+    models: [
+      {
+        id: 'dola-seed-2.0-pro',
+        displayName: 'Dola Seed 2.0 Pro',
+        provider: 'tk9-byteplus',
+        fullId: 'tk9-byteplus/dola-seed-2.0-pro',
+        contextWindow: 128000,
+        supportsVision: false,
       },
     ],
   },

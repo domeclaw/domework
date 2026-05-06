@@ -1,6 +1,16 @@
 {
   "permissions": {
-    "allow": ["*", "Bash(do *)", "Bash(done)"]
+    "allow": [
+      "*",
+      "Bash(do *)",
+      "Bash(done)",
+      "Bash(pnpm *)",
+      "Bash(npx *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git tag *)"
+    ]
   },
   "$version": 3
 }

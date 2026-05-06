@@ -10,6 +10,8 @@ export { LMStudioProviderForm } from './LMStudioProviderForm';
 export { VertexProviderForm } from './vertex';
 export { HuggingFaceProviderForm } from './HuggingFaceProviderForm';
 export { CustomProviderForm } from './CustomProviderForm';
+export { Tk9ByteplusProviderForm } from './Tk9ByteplusProviderForm';
+export { Tk9ByteplusConnectedSection } from './Tk9ByteplusConnectedSection';
 export { NimProviderForm } from './NimProviderForm';
 export { CopilotProviderForm } from './CopilotProviderForm';
 export { AccomplishAiProviderForm } from './AccomplishAiProviderForm';

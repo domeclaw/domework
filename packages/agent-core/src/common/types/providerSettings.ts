@@ -22,6 +22,7 @@ export type ProviderId =
   | 'venice'
   | 'nim'
   | 'custom'
+  | 'tk9-byteplus'
   | 'copilot'
   | 'accomplish-ai';
 
@@ -210,6 +211,13 @@ export const PROVIDER_META: Record<ProviderId, ProviderMeta> = {
     label: 'Custom',
     logoKey: 'custom',
   },
+  'tk9-byteplus': {
+    id: 'tk9-byteplus',
+    name: 'Tokenine Byteplus',
+    category: 'hybrid',
+    label: 'Service',
+    logoKey: 'tk9-byteplus',
+  },
   copilot: {
     id: 'copilot',
     name: 'GitHub Copilot',
@@ -286,6 +294,14 @@ export interface CustomCredentials {
   keyPrefix?: string;
 }
 
+export interface Tk9ByteplusCredentials {
+  type: 'tk9-byteplus';
+  baseUrl: string;
+  modelName: string;
+  hasApiKey: boolean;
+  keyPrefix?: string;
+}
+
 export interface NimCredentials {
   type: 'nim';
   serverUrl: string;
@@ -337,6 +353,7 @@ export type ProviderCredentials =
   | CopilotOAuthCredentials
   | AccomplishAiCredentials
   | CustomCredentials
+  | Tk9ByteplusCredentials
   | NimCredentials;
 
 export type ToolSupportStatus = 'supported' | 'unsupported' | 'unknown';
@@ -398,6 +415,7 @@ export const DEFAULT_MODELS: Partial<Record<ProviderId, string>> = {
   nim: 'nim/meta/llama-3.1-70b-instruct',
   copilot: 'copilot/gpt-4o',
   'accomplish-ai': 'accomplish-ai/accomplish-free',
+  'tk9-byteplus': 'tk9-byteplus/dola-seed-2.0-pro',
 };
 
 export function getDefaultModelForProvider(providerId: ProviderId): string | null {
@@ -433,6 +451,7 @@ export const PROVIDER_ID_TO_OPENCODE: Record<ProviderId, string> = {
   venice: 'venice',
   nim: 'nim',
   custom: 'custom',
+  'tk9-byteplus': 'tk9-byteplus',
   copilot: 'github-copilot',
   'accomplish-ai': 'accomplish-ai',
 };

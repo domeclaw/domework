@@ -105,6 +105,7 @@ interface AccomplishAPI {
       | 'zai'
       | 'azure-foundry'
       | 'custom'
+      | 'tk9-byteplus'
       | 'bedrock'
       | 'litellm'
       | 'lmstudio'

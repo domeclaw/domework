@@ -428,6 +428,7 @@ export type {
   CopilotOAuthCredentials,
   AccomplishAiCredentials,
   CustomCredentials,
+  Tk9ByteplusCredentials,
   NimCredentials,
   ProviderCredentials,
   ToolSupportStatus,
