@@ -1,8 +1,9 @@
 import { Button } from '@/components/ui/button';
-import { Pencil, Trash2 } from 'lucide-react';
+import { FolderOpen, Pencil, Trash2 } from 'lucide-react';
 import type { Workspace } from '@accomplish_ai/agent-core/common';
 import { EditWorkspaceForm } from './WorkspacePanelForm';
 import { KnowledgeNotesPanel } from './KnowledgeNotesPanel';
+import { useWorkspaceStore } from '@/stores/workspaceStore';
 
 interface WorkspaceRowProps {
   workspace: Workspace;
@@ -98,6 +99,17 @@ export function WorkspaceRow({
           </div>
         </div>
         <div className="flex items-center gap-1 flex-shrink-0">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
+            onClick={() => useWorkspaceStore.getState().openWorkspaceDirectory()}
+            title="Open workspace folder"
+            aria-label="Open workspace folder"
+          >
+            <FolderOpen className="h-3.5 w-3.5" />
+          </Button>
           <Button
             type="button"
             variant="ghost"

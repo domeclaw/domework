@@ -5,7 +5,22 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const APP_DATA_NAME = 'Domework';
+const APP_FILES_DIR_NAME = 'files';
+
 app.setPath('userData', path.join(app.getPath('appData'), APP_DATA_NAME));
+
+/**
+ * Ensure the `files` subdirectory exists inside `userData`.
+ * Called once at first startup so the user always has a clean place
+ * to store workspace files — separate from DB/config files.
+ */
+export function getFilesDirectory(): string {
+  const filesDir = path.join(app.getPath('userData'), APP_FILES_DIR_NAME);
+  if (!fs.existsSync(filesDir)) {
+    fs.mkdirSync(filesDir, { recursive: true });
+  }
+  return filesDir;
+}
 
 if (process.platform === 'win32') {
   app.setAppUserModelId('ai.accomplish.desktop');
@@ -336,6 +351,8 @@ if (!gotTheLock) {
   });
 
   app.whenReady().then(async () => {
+    // Ensure workspace files directory exists on first launch
+    getFilesDirectory();
     await startApp(createWindow, () => mainWindow, isQuittingRef);
   });
 }

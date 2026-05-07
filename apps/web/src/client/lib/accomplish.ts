@@ -554,6 +554,7 @@ interface AccomplishAPI {
   createWorkspace(input: WorkspaceCreateInput): Promise<Workspace>;
   updateWorkspace(id: string, input: WorkspaceUpdateInput): Promise<Workspace | null>;
   deleteWorkspace(id: string): Promise<boolean>;
+  openWorkspaceDirectory(): Promise<void>;
 
   // Knowledge Notes
   listKnowledgeNotes(workspaceId: string): Promise<KnowledgeNote[]>;

@@ -1,4 +1,6 @@
-import { BrowserWindow } from 'electron';
+import { app, BrowserWindow, shell } from 'electron';
+import path from 'path';
+import fs from 'fs';
 import type { IpcMainInvokeEvent } from 'electron';
 import type {
   KnowledgeNoteCreateInput,
@@ -10,6 +12,18 @@ import * as workspaceManager from '../../store/workspaceManager';
 import { handle } from './utils';
 import { getDaemonClient } from '../../daemon-bootstrap';
 import { isDaemonStopped } from '../../daemon/daemon-connector';
+
+/**
+ * Resolve the workspace files directory: `<userData>/files`.
+ * Creates it on first access if it doesn't exist.
+ */
+function getFilesDirectory(): string {
+  const filesDir = path.join(app.getPath('userData'), 'files');
+  if (!fs.existsSync(filesDir)) {
+    fs.mkdirSync(filesDir, { recursive: true });
+  }
+  return filesDir;
+}
 
 async function hasDaemonActiveTasks(): Promise<boolean> {
   try {
@@ -130,4 +144,10 @@ export function registerWorkspaceHandlers(): void {
       await getDaemonClient().call('knowledgeNote.delete', { noteId: id, workspaceId });
     },
   );
+
+  // Open workspace directory in File Explorer / Finder
+  handle('workspace:open-directory', async () => {
+    const filesDir = getFilesDirectory();
+    await shell.openPath(filesDir);
+  });
 }

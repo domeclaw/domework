@@ -31,6 +31,7 @@
  */
 
 import { spawn, spawnSync, type ChildProcess } from 'child_process';
+import path from 'path';
 import {
   resolveCliPath,
   type StorageAPI,
@@ -186,7 +187,9 @@ function spawnOpenCodeServer(
   // Without this merge the shim runs in a near-empty env and the wrapper
   // shell script can't `exec node`. The runtime overrides win on conflict.
   const mergedEnv: NodeJS.ProcessEnv = { ...process.env, ...runtimeEnv };
+  const filesDir = path.join(deps.userDataPath, 'files');
   const proc = spawn(command, args, {
+    cwd: filesDir,
     detached: process.platform !== 'win32',
     env: mergedEnv,
     signal,

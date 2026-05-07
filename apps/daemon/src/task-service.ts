@@ -1,5 +1,6 @@
 import { EventEmitter } from 'node:events';
-import { tmpdir, homedir } from 'node:os';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import {
   createTaskManager,
   createTaskId,
@@ -152,7 +153,7 @@ export class TaskService extends EventEmitter {
         // Permission auto-approval mode from settings
         permissionMode: this.settingsService.getPermissionMode(),
       },
-      defaultWorkingDirectory: homedir(),
+      defaultWorkingDirectory: path.join(this.opts.userDataPath, 'files'),
       maxConcurrentTasks: 10,
       isCliAvailable: () => isCliAvailable(this.opts),
       onBeforeTaskStart: createOnBeforeTaskStart(this.opts),

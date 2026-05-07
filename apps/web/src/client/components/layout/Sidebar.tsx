@@ -12,9 +12,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import ConversationListItem from './ConversationListItem';
 import SettingsDialog from './SettingsDialog';
 import WorkspaceSelector from './WorkspaceSelector';
-import { Gear, ChatText, MagnifyingGlass } from '@phosphor-icons/react';
+import { Gear, ChatText, MagnifyingGlass, FolderOpen } from '@phosphor-icons/react';
 import { DaemonStatusDot } from '@/components/DaemonStatusDot';
 import logoImage from '/assets/logo-1.png';
+import { useWorkspaceStore } from '@/stores/workspaceStore';
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -141,6 +142,14 @@ export default function Sidebar() {
           {/* Settings Button + Daemon Status - Bottom Right */}
           <div className="flex items-center gap-2">
             <DaemonStatusDot />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => useWorkspaceStore.getState().openWorkspaceDirectory()}
+              title="Open workspace folder"
+            >
+              <FolderOpen className="h-4 w-4" />
+            </Button>
             <Button
               data-testid="sidebar-settings-button"
               variant="ghost"

@@ -20,6 +20,7 @@ interface WorkspaceState {
   createWorkspace: (input: WorkspaceCreateInput) => Promise<Workspace | null>;
   updateWorkspace: (id: string, input: WorkspaceUpdateInput) => Promise<Workspace | null>;
   deleteWorkspace: (id: string) => Promise<boolean>;
+  openWorkspaceDirectory: () => Promise<void>;
   setActiveWorkspaceId: (id: string) => void;
 }
 
@@ -107,6 +108,15 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
     } catch (err) {
       logger.error('Failed to delete workspace:', err);
       return false;
+    }
+  },
+
+  openWorkspaceDirectory: async () => {
+    try {
+      const accomplish = getAccomplish();
+      await accomplish.openWorkspaceDirectory();
+    } catch (err) {
+      logger.error('Failed to open workspace directory:', err);
     }
   },
 

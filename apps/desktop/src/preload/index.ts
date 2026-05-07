@@ -811,6 +811,7 @@ const accomplishAPI = {
   updateWorkspace: (id: string, input: WorkspaceUpdateInput): Promise<Workspace | null> =>
     ipcRenderer.invoke('workspace:update', id, input),
   deleteWorkspace: (id: string): Promise<boolean> => ipcRenderer.invoke('workspace:delete', id),
+  openWorkspaceDirectory: (): Promise<void> => ipcRenderer.invoke('workspace:open-directory'),
 
   // Knowledge Notes
   listKnowledgeNotes: (workspaceId: string): Promise<KnowledgeNote[]> =>
